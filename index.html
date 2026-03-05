@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alberto Avataro Kūrimas</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Special+Elite&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        vintage: {
+                            light: '#e8dcc4',
+                            DEFAULT: '#d4c098',
+                            dark: '#8b6f4e',
+                            text: '#3a2a18',
+                            border: '#5c4326'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        typewriter: ['"Special Elite"', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #e2d3b1;
+            background-image:
+                radial-gradient(circle at top, rgba(255,255,255,0.35) 0%, transparent 45%),
+                radial-gradient(circle at bottom, rgba(90,71,45,0.45) 0%, transparent 55%),
+                url("data:image/svg+xml,%3Csvg width='160' height='160' viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23noise)' opacity='0.09'/%3E%3C/svg%3E");
+            color: #3a2a18;
+            overflow-x: hidden;
+        }
+
+        /* Centered landing card */
+        .landing-card {
+            background: linear-gradient(135deg, rgba(253, 249, 236, 0.98), rgba(236, 220, 191, 0.98));
+            border-radius: 12px;
+            border: 2px solid rgba(92, 67, 38, 0.8);
+            box-shadow:
+                0 20px 45px rgba(0,0,0,0.35),
+                0 0 0 1px rgba(255,255,255,0.3);
+        }
+
+        /* Vintage header strip */
+        .vintage-header {
+            background: linear-gradient(to bottom, #f4ead3, #e2d3b1);
+            box-shadow:
+                0 4px 10px rgba(0,0,0,0.25),
+                inset 0 -2px 0 rgba(115, 87, 55, 0.55);
+            border-bottom: 3px double rgba(92,67,38,0.9);
+        }
+
+        /* Vintage Frame for Video */
+        .vintage-frame {
+            border: 12px solid #4a3424;
+            border-radius: 4px;
+            box-shadow: 
+                inset 0 0 20px rgba(0,0,0,0.8),
+                0 15px 30px rgba(0,0,0,0.5),
+                0 0 0 4px #8b6f4e,
+                0 0 0 6px #2a1a0f;
+            position: relative;
+            background: #1a1a1a;
+            overflow: hidden;
+        }
+        
+        .vintage-frame::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            background-size: 100% 4px, 6px 100%;
+            pointer-events: none;
+            opacity: 0.3;
+        }
+
+        /* Scroll Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Typewriter Chat */
+        .chat-container {
+            background: #fdfaf1;
+            box-shadow: inset 0 0 30px rgba(139, 111, 78, 0.2), 0 10px 20px rgba(0,0,0,0.2);
+            border: 2px solid #8b6f4e;
+        }
+        .chat-message {
+            border-bottom: 1px dashed #c2b29a;
+            padding-bottom: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .loading-dots:after {
+            content: '.';
+            animation: dots 1.5s steps(5, end) infinite;
+        }
+        @keyframes dots {
+            0%, 20% { color: rgba(0,0,0,0); text-shadow: .25em 0 0 rgba(0,0,0,0), .5em 0 0 rgba(0,0,0,0); }
+            40% { color: inherit; text-shadow: .25em 0 0 rgba(0,0,0,0), .5em 0 0 rgba(0,0,0,0); }
+            60% { text-shadow: .25em 0 0 inherit, .5em 0 0 rgba(0,0,0,0); }
+            80%, 100% { text-shadow: .25em 0 0 inherit, .5em 0 0 inherit; }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #d4c098; }
+        ::-webkit-scrollbar-thumb { background: #8b6f4e; border-radius: 5px; }
+        ::-webkit-scrollbar-thumb:hover { background: #5c4326; }
+    </style>
+</head>
+<body class="font-serif antialiased">
+
+    <!-- Audio Element -->
+    <audio id="bgMusic" loop>
+        <source src="Albertas groja.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Navigation / Header -->
+    <header class="fixed w-full top-0 z-50 vintage-header text-vintage-text">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex flex-col gap-1">
+                <span class="text-xs font-typewriter tracking-[0.25em] uppercase opacity-70">Skaitmeninė telegrama · 1940</span>
+                <h1 class="text-2xl md:text-3xl font-serif font-bold tracking-wider flex items-center gap-2">
+                    <i class="fa-solid fa-atom text-vintage-dark"></i>
+                    Alberto Avataro Laboratorija
+                </h1>
+            </div>
+            <button id="musicToggle" class="px-4 py-2 bg-vintage-dark text-vintage-light font-bold rounded-full shadow hover:bg-vintage-border transition border border-vintage-border flex items-center gap-2">
+                <i class="fa-solid fa-music"></i> <span id="musicText">Groti muziką</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="min-h-screen pt-28 pb-16 flex items-center justify-center px-4 relative">
+        <div class="landing-card max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-stretch px-6 md:px-10 py-10 border-vintage-border">
+            <div class="reveal flex flex-col justify-center text-center md:text-left">
+                <p class="font-typewriter text-xs uppercase tracking-[0.35em] mb-3 text-vintage-dark/80">
+                    Telegrama iš 1940-ųjų laboratorijos
+                </p>
+                <h2 class="text-4xl md:text-5xl font-serif font-bold mb-5 text-vintage-text leading-tight">
+                    Gyvenimas po mirties<br class="hidden md:block" /> skaitmeninėje erdvėje
+                </h2>
+                <p class="text-lg leading-relaxed mb-6 font-typewriter">
+                    Kaip genialus protas sugrįžo į šiuolaikinį pasaulį? Čia atskleidžiamas visas procesas –
+                    nuo nuotraukos ir balso iki animuoto avataro, kuris dabar kalba su jumis ekrane.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 sm:items-center">
+                    <a href="#steps" class="inline-flex items-center justify-center px-7 py-3 bg-vintage-dark text-vintage-light text-base md:text-lg rounded-full hover:bg-vintage-border transition shadow">
+                        <i class="fa-solid fa-list-check mr-2"></i>
+                        Peržiūrėti 5 žingsnius
+                    </a>
+                    <a href="#chat" class="inline-flex items-center justify-center px-6 py-3 border border-dashed border-vintage-dark/70 text-vintage-text text-sm md:text-base rounded-full bg-vintage-light/60 hover:bg-vintage-light transition font-typewriter">
+                        <i class="fa-solid fa-teletype mr-2"></i>
+                        Parašyti Albertui
+                    </a>
+                </div>
+            </div>
+            
+            <div class="reveal flex items-center justify-center">
+                <div class="vintage-frame inline-block">
+                    <video id="avatarVideo" class="block max-w-full h-auto" controls poster="Mantas-Ensteinas Avataras.jpg">
+                        <source src="Albertas kalba.mp4" type="video/mp4">
+                        Jūsų naršyklė nepalaiko vaizdo įrašų peržiūros.
+                    </video>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5 Steps Section -->
+    <section id="steps" class="py-20 bg-vintage/40 relative border-y-2 border-vintage-dark/30">
+        <div class="max-w-4xl mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-16 text-vintage-border"><i class="fa-solid fa-cogs mr-3"></i>5 Kūrimo Žingsniai</h2>
+            
+            <div class="space-y-12 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-1 before:bg-vintage-dark/40">
+                
+                <!-- Step 1 -->
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active reveal">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-vintage bg-vintage-dark text-vintage-light shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 absolute left-0 md:left-1/2 z-10 font-bold">1</div>
+                    <div class="w-[calc(100%-3rem)] md:w-[calc(50%-2.5rem)] ml-12 md:ml-0 bg-vintage-light p-6 rounded border border-vintage-dark shadow-md">
+                        <h3 class="text-xl font-bold mb-2 flex items-center gap-2"><i class="fa-regular fa-lightbulb text-vintage-dark"></i> Koncepcija ir Vizija</h3>
+                        <p class="font-typewriter text-sm leading-relaxed">Pirmasis žingsnis – idėjos sugeneravimas. Pasirenkamas istorinis asmuo (šiuo atveju, aš, Albertas) ir apibrėžiamas avataro tikslas: edukacija, pramoga ar technologijų demonstracija.</p>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active reveal">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-vintage bg-vintage-dark text-vintage-light shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 absolute left-0 md:left-1/2 z-10 font-bold">2</div>
+                    <div class="w-[calc(100%-3rem)] md:w-[calc(50%-2.5rem)] ml-12 md:ml-0 bg-vintage-light p-6 rounded border border-vintage-dark shadow-md">
+                        <h3 class="text-xl font-bold mb-2 flex items-center gap-2"><i class="fa-solid fa-camera-retro text-vintage-dark"></i> Veido / Vaizdo Paruošimas</h3>
+                        <p class="font-typewriter text-sm leading-relaxed">Naudojant pažangius vaizdo generavimo AI (pvz., Midjourney), sukuriamas aukštos raiškos bazinis portretas. Svarbu išlaikyti istorinį autentiškumą ir išraiškingus veido bruožus animacijai.</p>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active reveal">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-vintage bg-vintage-dark text-vintage-light shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 absolute left-0 md:left-1/2 z-10 font-bold">3</div>
+                    <div class="w-[calc(100%-3rem)] md:w-[calc(50%-2.5rem)] ml-12 md:ml-0 bg-vintage-light p-6 rounded border border-vintage-dark shadow-md">
+                        <h3 class="text-xl font-bold mb-2 flex items-center gap-2"><i class="fa-solid fa-microphone-lines text-vintage-dark"></i> Balso Sintezė</h3>
+                        <p class="font-typewriter text-sm leading-relaxed">Tekstas paverčiamas garsu. Naudojant įrankius, tokius kaip "ElevenLabs", sukuriamas unikalus balso modelis. Parenkamas tembras, greitis ir akcentas, kad skambėtų lyg tikras genialus mokslininkas.</p>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active reveal">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-vintage bg-vintage-dark text-vintage-light shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 absolute left-0 md:left-1/2 z-10 font-bold">4</div>
+                    <div class="w-[calc(100%-3rem)] md:w-[calc(50%-2.5rem)] ml-12 md:ml-0 bg-vintage-light p-6 rounded border border-vintage-dark shadow-md">
+                        <h3 class="text-xl font-bold mb-2 flex items-center gap-2"><i class="fa-solid fa-film text-vintage-dark"></i> Lūpų Sinchronizacija</h3>
+                        <p class="font-typewriter text-sm leading-relaxed">Tai magijos dalis! Programos (pvz., "HeyGen") sujungia statinį vaizdą ir sugeneruotą garsą. Dirbtinis intelektas analizuoja garsą ir animuoja lūpas, akių mirksėjimą bei galvos judesius.</p>
+                    </div>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active reveal">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-vintage bg-vintage-dark text-vintage-light shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 absolute left-0 md:left-1/2 z-10 font-bold">5</div>
+                    <div class="w-[calc(100%-3rem)] md:w-[calc(50%-2.5rem)] ml-12 md:ml-0 bg-vintage-light p-6 rounded border border-vintage-dark shadow-md">
+                        <h3 class="text-xl font-bold mb-2 flex items-center gap-2"><i class="fa-solid fa-laptop-code text-vintage-dark"></i> Interaktyvumo Programavimas</h3>
+                        <p class="font-typewriter text-sm leading-relaxed">Svetainės sukūrimas naudojant "Cursor" AI asistentą. Čia sujungiami HTML, CSS ir JavaScript kodai, integruojamas muzikos grotuvas ir OpenAI intelektas, kad avataras galėtų su jumis "bendrauti".</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Chat Section -->
+    <section id="chat" class="py-20 px-4 reveal">
+        <div class="max-w-3xl mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-8"><i class="fa-solid fa-teletype mr-3"></i>Telegrama Albertui</h2>
+            
+            <div class="chat-container rounded-lg p-6 font-typewriter h-[500px] flex flex-col">
+                <!-- Chat Messages Area -->
+                <div id="chatBox" class="flex-1 overflow-y-auto mb-4 pr-2 space-y-4 text-sm md:text-base">
+                    <div class="chat-message">
+                        <strong>[Sistemos Pranešimas]:</strong> Ryšys užmegztas. Sveiki, aš esu Alberto avataras. Klauskite manęs apie tai, kaip aš buvau sukurtas: vaizdo generavimą, balsą (ElevenLabs), animaciją (HeyGen) ar Cursor programavimą.
+                    </div>
+                </div>
+                
+                <!-- Input Area -->
+                <div class="flex gap-2 border-t-2 border-vintage-dark pt-4">
+                    <input type="text" id="userInput" placeholder="Įveskite savo klausimą čia..." 
+                        class="flex-1 bg-transparent border-2 border-vintage-dark rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-vintage-border placeholder-vintage-dark/50 text-vintage-text"
+                        onkeypress="if(event.key === 'Enter') sendMessage()">
+                    <button onclick="sendMessage()" class="bg-vintage-dark text-vintage-light px-6 py-2 rounded font-serif hover:bg-vintage-border transition shadow">
+                        Siųsti
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-vintage-dark text-vintage-light text-center py-6 font-typewriter text-sm">
+        <p>&copy; 2024 AI Avataro Eksperimentas. Sukurta su Cursor pagalba.</p>
+    </footer>
+
+    <!-- Logic Script -->
+    <script>
+        // --- 1. Audio Controls ---
+        const bgMusic = document.getElementById('bgMusic');
+        const musicToggle = document.getElementById('musicToggle');
+        const musicText = document.getElementById('musicText');
+        const musicIcon = musicToggle.querySelector('i');
+        let isPlaying = false;
+
+        musicToggle.addEventListener('click', () => {
+            if (isPlaying) {
+                bgMusic.pause();
+                musicText.textContent = "Groti muziką";
+                musicIcon.className = "fa-solid fa-music";
+            } else {
+                bgMusic.play();
+                musicText.textContent = "Sustabdyti";
+                musicIcon.className = "fa-solid fa-volume-xmark";
+            }
+            isPlaying = !isPlaying;
+        });
+
+        // Volume adjustments
+        bgMusic.volume = 0.4; // Soft background music
+
+        // Pause music if video is played so they don't overlap
+        const avatarVideo = document.getElementById('avatarVideo');
+        avatarVideo.addEventListener('play', () => {
+            if (isPlaying) {
+                bgMusic.pause();
+                musicText.textContent = "Groti muziką";
+                musicIcon.className = "fa-solid fa-music";
+                isPlaying = false;
+            }
+        });
+
+        // --- 2. Scroll Animation (Intersection Observer) ---
+        const revealElements = document.querySelectorAll('.reveal');
+        
+        const revealObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15 });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // --- 3. OpenAI Chatbot Logic ---
+        // Naudojame tavo pateiktą OPENAI_API_KEY (dėmesio: viešai rodyti nėra saugu produkcijoje)
+        const OPENAI_API_KEY = "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";
+        const chatBox = document.getElementById('chatBox');
+        const userInput = document.getElementById('userInput');
+
+        // Conversation history
+        let conversationHistory = [
+            { 
+                role: "system", 
+                content: `Tu esi Albertas Einšteinas, atgijęs kaip AI avataras. Tavo tonas turi būti išmintingas, šiek tiek senoviškas ir draugiškas.
+                TAVO GRIEŽTA TAISYKLĖ: Tu atsakinėji TIK į klausimus, susijusius su tavo kaip avataro sukūrimo procesu, kuris susideda iš 5 žingsnių (Koncepcija, Vaizdo generavimas, Balso sintezė pvz. ElevenLabs, Lūpų sinchronizacija pvz. HeyGen, ir Programavimas su Cursor).
+                Jeigu vartotojas klausia bet ko kito (net apie fiziką, reliatyvumo teoriją, orą ir pan.), tu PRIVALAI mandagiai atsisakyti atsakyti, pasakydamas, kad tavo skaitmeninė sąmonė šiuo metu sukalibruota kalbėti tik apie tavo avataro sukūrimo technologijas. Būk trumpas ir aiškus.` 
+            }
+        ];
+
+        async function sendMessage() {
+            const text = userInput.value.trim();
+            if(!text) return;
+
+            // Append user message
+            appendMessage("Jūs", text, "#5c4326");
+            userInput.value = '';
+
+            // Add to history
+            conversationHistory.push({ role: "user", content: text });
+
+            // Loading state
+            const loadingId = "msg-" + Date.now();
+            appendMessage("Albertas", "<span class='loading-dots'>Galvoja</span>", "#8b6f4e", loadingId);
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            try {
+                const response = await fetch("https://api.openai.com/v1/chat/completions", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${OPENAI_API_KEY}`
+                    },
+                    body: JSON.stringify({
+                        model: "gpt-4o-mini", // greitas ir pigesnis modelis
+                        messages: conversationHistory,
+                        temperature: 0.7,
+                        max_tokens: 300
+                    })
+                });
+
+                if(!response.ok) {
+                    const errText = await response.text();
+                    console.error("OpenAI API klaida:", response.status, response.statusText, errText);
+                    throw new Error("API Klaida");
+                }
+
+                const data = await response.json();
+                const aiReply = data.choices[0].message.content;
+
+                // Remove loading
+                document.getElementById(loadingId).remove();
+
+                // Append AI message
+                appendMessage("Albertas", aiReply, "#2a1a0f");
+                conversationHistory.push({ role: "assistant", content: aiReply });
+
+            } catch (error) {
+                document.getElementById(loadingId).remove();
+                appendMessage("Sistemos Klaida", "Atleiskite, sutriko mano kvantinis ryšys su serveriu. Prašome pabandyti vėliau.", "red");
+            }
+        }
+
+        // Užregistruojame funkciją globaliai, kad veiktų onclick/onkeypress HTML atribute
+        window.sendMessage = sendMessage;
+
+        function appendMessage(sender, htmlContent, color, id = null) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'chat-message';
+            if(id) msgDiv.id = id;
+            msgDiv.innerHTML = `<strong style="color: ${color}">[${sender}]:</strong> <span>${htmlContent}</span>`;
+            chatBox.appendChild(msgDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+    </script>
+</body>
+</html>
